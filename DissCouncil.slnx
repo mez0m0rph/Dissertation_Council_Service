@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="DissCouncil.App/DissCouncil.App.csproj" />
+  <Project Path="DissCouncil.Domain/DissCouncil.Domain.csproj" />
+  <Project Path="DissCouncil.Persistence/DissCouncil.Persistence.csproj" />
+</Solution>
