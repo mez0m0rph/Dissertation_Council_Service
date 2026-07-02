@@ -16,4 +16,9 @@ public class DissertationService : IDissertationService
     {
         await _repo.AddAsync(dissertation);
     }
+
+    public async Task<List<Dissertation>> GetAllAsync()
+    {
+        return await _repo.GetAllAsync();
+    }
 }
