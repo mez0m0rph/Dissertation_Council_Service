@@ -1,4 +1,5 @@
 using DissCouncil.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DissCouncil.Persistence.Repositories;
 
@@ -15,5 +16,12 @@ public class DissertationRepository : IDissertationRepository
     {
         _context.Dissertations.Add(dissertation);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Dissertation>> GetAllAsync()
+    {
+        return await _context.Dissertations
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

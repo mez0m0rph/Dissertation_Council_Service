@@ -5,4 +5,5 @@ namespace DissCouncil.App.Services;
 public interface IDissertationService
 {
     Task AddAsync(Dissertation dissertation);
+    Task<List<Dissertation>> GetAllAsync();
 }

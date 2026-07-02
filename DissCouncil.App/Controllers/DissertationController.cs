@@ -21,4 +21,11 @@ public class DissertationController : ControllerBase
         await _service.AddAsync(dissertation);
         return Ok(dissertation);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var dissertations = await _service.GetAllAsync();
+        return Ok(dissertations);
+    }
 }
