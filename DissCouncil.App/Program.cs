@@ -1,23 +1,20 @@
+using DissCouncil.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+//создание строителя приложения 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+//добавление сервисов (что приложение умеет делать - регистрирование способностей)
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+// граница (собираем все регистрации в готовое приложение)
+var app = builder.Build();  // готовое приложение из всех регистраций
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
+// middleware-конвейер (она же цепочка обработчиков запроса)
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
 
+// запуск приложения
 app.Run();
