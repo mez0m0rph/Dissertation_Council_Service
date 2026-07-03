@@ -21,4 +21,9 @@ public class DissertationService : IDissertationService
     {
         return await _repo.GetAllAsync();
     }
+
+    public async Task<Dissertation?> GetByIdAsync(Guid id)
+    {
+        return await _repo.GetByIdAsync(id);
+    }
 }
