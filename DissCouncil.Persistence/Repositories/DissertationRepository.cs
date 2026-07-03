@@ -31,4 +31,10 @@ public class DissertationRepository : IDissertationRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
     }
+
+    public async Task UpdateAsync(Dissertation updatedDis)
+    {
+        _context.Dissertations.Update(updatedDis);
+        await _context.SaveChangesAsync();
+    }
 }
