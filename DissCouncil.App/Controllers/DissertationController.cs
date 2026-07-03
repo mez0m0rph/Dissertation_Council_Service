@@ -39,4 +39,16 @@ public class DissertationController : ControllerBase
 
         return Ok(dissertation);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, Dissertation updatedDis)
+    {
+        var existing = await _service.GetByIdAsync(id);
+        if (existing is null) 
+            return NotFound();
+
+        updatedDis.Id = id;
+        await _service.UpdateAsync(updatedDis);
+        return Ok();
+    }
 }
