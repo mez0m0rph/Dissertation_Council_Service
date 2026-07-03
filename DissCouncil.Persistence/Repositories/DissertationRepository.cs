@@ -24,4 +24,11 @@ public class DissertationRepository : IDissertationRepository
             .AsNoTracking()
             .ToListAsync();
     }
+
+    public async Task<Dissertation?> GetByIdAsync(Guid id)
+    {
+        return await _context.Dissertations
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 }

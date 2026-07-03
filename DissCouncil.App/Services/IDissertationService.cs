@@ -6,4 +6,5 @@ public interface IDissertationService
 {
     Task AddAsync(Dissertation dissertation);
     Task<List<Dissertation>> GetAllAsync();
+    Task<Dissertation?> GetByIdAsync(Guid id);
 }

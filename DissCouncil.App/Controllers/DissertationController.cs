@@ -28,4 +28,15 @@ public class DissertationController : ControllerBase
         var dissertations = await _service.GetAllAsync();
         return Ok(dissertations);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var dissertation = await _service.GetByIdAsync(id);
+
+        if(dissertation == null) 
+            return NotFound();
+
+        return Ok(dissertation);
+    }
 }
