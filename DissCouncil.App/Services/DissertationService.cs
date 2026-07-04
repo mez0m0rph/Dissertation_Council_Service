@@ -27,18 +27,13 @@ public class DissertationService : IDissertationService
         return await _repo.GetByIdAsync(id);
     }
 
-    public async Task UpdateAsync(Dissertation updatedDis)
+    public async Task<bool> UpdateAsync(Guid id, Dissertation updatedDis)
     {
-        await _repo.UpdateAsync(updatedDis);
+        return await _repo.UpdateAsync(id, updatedDis);
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        var deleted = await _repo.DeleteAsync(id);
-
-        if (!deleted)
-            return false;
-
-        return true;
+        return await _repo.DeleteAsync(id);
     }
 }

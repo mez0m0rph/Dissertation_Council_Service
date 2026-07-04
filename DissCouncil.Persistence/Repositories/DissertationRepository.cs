@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using DissCouncil.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,10 +32,22 @@ public class DissertationRepository : IDissertationRepository
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task UpdateAsync(Dissertation updatedDis)
+    public async Task<bool> UpdateAsync(Guid id, Dissertation updatedDis)
     {
-        _context.Dissertations.Update(updatedDis);
+        var dissertation = await _context.Dissertations
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (dissertation is null)
+            return false;
+
+        dissertation.Title = updatedDis.Title;
+        dissertation.SpecialtyCode = updatedDis.SpecialtyCode;
+        dissertation.Type = updatedDis.Type;
+        dissertation.Status = updatedDis.Status;
+        dissertation.ApplicationDate = updatedDis.ApplicationDate;
+        
         await _context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id)

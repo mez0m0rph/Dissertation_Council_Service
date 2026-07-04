@@ -43,13 +43,12 @@ public class DissertationController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, Dissertation updatedDis)
     {
-        var existing = await _service.GetByIdAsync(id);
-        if (existing is null) 
-            return NotFound();
+        var updated = await _service.UpdateAsync(id, updatedDis);
 
-        updatedDis.Id = id;
-        await _service.UpdateAsync(updatedDis);
-        return Ok();
+        if (!updated)
+            return NotFound();
+        
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
