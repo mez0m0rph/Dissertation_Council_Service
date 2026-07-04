@@ -55,7 +55,11 @@ public class DissertationController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _service.DeleteAsync(id);
-        return Ok();
+        var deleted = await _service.DeleteAsync(id);
+
+        if (!deleted) 
+            return NotFound();
+
+        return NoContent();
     }
 }
