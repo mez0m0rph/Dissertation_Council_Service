@@ -8,4 +8,5 @@ public interface IDissertationService
     Task<List<Dissertation>> GetAllAsync();
     Task<Dissertation?> GetByIdAsync(Guid id);
     Task UpdateAsync(Dissertation updatedDis);
+    Task<bool> DeleteAsync(Guid id);
 }

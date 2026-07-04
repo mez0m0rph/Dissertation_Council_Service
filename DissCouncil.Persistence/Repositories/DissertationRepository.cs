@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using DissCouncil.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,5 +37,18 @@ public class DissertationRepository : IDissertationRepository
     {
         _context.Dissertations.Update(updatedDis);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var dissertation = await _context.Dissertations
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (dissertation is null)
+            return false;
+        
+        _context.Dissertations.Remove(dissertation);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }
