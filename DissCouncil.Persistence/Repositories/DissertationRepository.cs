@@ -32,22 +32,10 @@ public class DissertationRepository : IDissertationRepository
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<bool> UpdateAsync(Guid id, Dissertation updatedDis)
+    public async Task UpdateAsync(Dissertation updatedDis)
     {
-        var dissertation = await _context.Dissertations
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (dissertation is null)
-            return false;
-
-        dissertation.Title = updatedDis.Title;
-        dissertation.SpecialtyCode = updatedDis.SpecialtyCode;
-        dissertation.Type = updatedDis.Type;
-        dissertation.Status = updatedDis.Status;
-        dissertation.ApplicationDate = updatedDis.ApplicationDate;
-        
+        _context.Dissertations.Update(updatedDis);
         await _context.SaveChangesAsync();
-        return true;
     }
 
     public async Task<bool> DeleteAsync(Guid id)
