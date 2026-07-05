@@ -1,5 +1,6 @@
 using DissCouncil.App.Services;
 using DissCouncil.Domain.Entities;
+using DissCouncil.App.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DissCouncil.App.Controllers;
@@ -16,10 +17,10 @@ public class DissertationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Dissertation dissertation)
+    public async Task<IActionResult> Create(CreateDissertationDto dto)
     {
-        await _service.AddAsync(dissertation);
-        return Ok(dissertation);
+        await _service.AddAsync(dto);
+        return Ok(dto);
     }
 
     [HttpGet]
@@ -41,9 +42,9 @@ public class DissertationController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, Dissertation updatedDis)
+    public async Task<IActionResult> Update(Guid id, UpdateDissertationDto dto)
     {
-        var updated = await _service.UpdateAsync(id, updatedDis);
+        var updated = await _service.UpdateAsync(id, dto);
 
         if (!updated)
             return NotFound();
