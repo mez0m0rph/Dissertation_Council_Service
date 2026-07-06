@@ -19,8 +19,8 @@ public class DissertationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateDissertationDto dto)
     {
-        await _service.AddAsync(dto);
-        return Ok(dto);
+        var created = await _service.AddAsync(dto);
+        return Ok(created);
     }
 
     [HttpGet]

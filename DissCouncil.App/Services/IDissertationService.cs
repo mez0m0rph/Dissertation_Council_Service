@@ -5,9 +5,9 @@ namespace DissCouncil.App.Services;
 
 public interface IDissertationService
 {
-    Task AddAsync(CreateDissertationDto dto);
-    Task<List<Dissertation>> GetAllAsync();
-    Task<Dissertation?> GetByIdAsync(Guid id);
+    Task<DissertationDto> AddAsync(CreateDissertationDto dto);
+    Task<List<DissertationDto>> GetAllAsync();
+    Task<DissertationDto?> GetByIdAsync(Guid id);
     Task<bool> UpdateAsync(Guid id, UpdateDissertationDto dto);
     Task<bool> DeleteAsync(Guid id);
 }

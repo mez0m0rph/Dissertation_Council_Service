@@ -14,7 +14,20 @@ public class DissertationService : IDissertationService
         _repo = repo;
     }
 
-    public async Task AddAsync(CreateDissertationDto dto)
+    private DissertationDto MapToDto(Dissertation dissertation)
+    {
+        return new DissertationDto
+        {
+            Id = dissertation.Id,
+            Title = dissertation.Title,
+            SpecialtyCode = dissertation.SpecialtyCode,
+            Type = dissertation.Type,
+            Status = dissertation.Status,
+            ApplicationDate = dissertation.ApplicationDate
+        };
+    }
+
+    public async Task<DissertationDto> AddAsync(CreateDissertationDto dto)
     {
         var dissertation = new Dissertation
         {
@@ -25,21 +38,32 @@ public class DissertationService : IDissertationService
             ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow)
         };
         await _repo.AddAsync(dissertation);
+        return MapToDto(dissertation);
+
     }
 
-    public async Task<List<Dissertation>> GetAllAsync()
+    public async Task<List<DissertationDto>> GetAllAsync()
     {
-        return await _repo.GetAllAsync();
+        var dissertations = await _repo.GetAllAsync();
+
+        return dissertations
+            .Select(x => MapToDto(x))
+            .ToList();
     }
 
-    public async Task<Dissertation?> GetByIdAsync(Guid id)
+    public async Task<DissertationDto?> GetByIdAsync(Guid id)
     {
-        return await _repo.GetByIdAsync(id);
+        var dissertation = await _repo.GetByIdAsync(id);
+        
+        if (dissertation is null)
+            return null;
+
+        return MapToDto(dissertation);
     }
 
     public async Task<bool> UpdateAsync(Guid id, UpdateDissertationDto dto)
     {
-        var existing = _repo.GetByIdAsync(id);
+        var existing = await _repo.GetByIdAsync(id);
 
         if (existing is null) 
             return false;
