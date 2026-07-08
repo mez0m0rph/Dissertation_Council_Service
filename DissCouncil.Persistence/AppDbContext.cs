@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Dissertation> Dissertations { get; set; }
+    public DbSet<Applicant> Applicants { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,6 +21,10 @@ public class AppDbContext : DbContext
         
         modelBuilder.Entity<Dissertation>()
             .Property(d => d.Status)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Applicant>()
+            .Property(x => x.Degree)
             .HasConversion<string>();
     }
 }
