@@ -15,6 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<IDissertationRepository, DissertationRepository>();
 builder.Services.AddScoped<IDissertationService, DissertationService>();
+builder.Services.AddScoped<IApplicantRepository, ApplicantRepository>();
+builder.Services.AddScoped<IApplicantService, ApplicantService>();
 
 //сбор инфы про эндпоинты
 builder.Services.AddEndpointsApiExplorer();
