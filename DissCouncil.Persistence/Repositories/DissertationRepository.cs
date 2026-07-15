@@ -22,6 +22,7 @@ public class DissertationRepository : IDissertationRepository
     {
         return await _context.Dissertations
             .AsNoTracking()
+            .Include(x => x.Applicant)
             .ToListAsync();
     }
 
@@ -29,6 +30,7 @@ public class DissertationRepository : IDissertationRepository
     {
         return await _context.Dissertations
             .AsNoTracking()
+            .Include(x => x.Applicant)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 

@@ -26,7 +26,8 @@ public class DissertationService : IDissertationService
             SpecialtyCode = dissertation.SpecialtyCode,
             Type = dissertation.Type,
             Status = dissertation.Status,
-            ApplicationDate = dissertation.ApplicationDate
+            ApplicationDate = dissertation.ApplicationDate,
+            ApplicantName = dissertation.Applicant?.FullName
         };
     }
 
