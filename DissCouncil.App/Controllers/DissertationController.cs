@@ -20,6 +20,10 @@ public class DissertationController : ControllerBase
     public async Task<IActionResult> Create(CreateDissertationDto dto)
     {
         var created = await _service.AddAsync(dto);
+        
+        if (created is null)
+            return BadRequest("Applicant was not found");
+            
         return Ok(created);
     }
 

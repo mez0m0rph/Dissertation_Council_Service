@@ -8,10 +8,13 @@ namespace DissCouncil.App.Services;
 public class DissertationService : IDissertationService
 {
     private readonly IDissertationRepository _repo;
+    private readonly IApplicantRepository _repoApplicant;
 
-    public DissertationService(IDissertationRepository repo)
+    public DissertationService(IDissertationRepository repo,
+        IApplicantRepository repoApplicant)
     {
         _repo = repo;
+        _repoApplicant = repoApplicant;
     }
 
     private DissertationDto MapToDto(Dissertation dissertation)
@@ -27,13 +30,19 @@ public class DissertationService : IDissertationService
         };
     }
 
-    public async Task<DissertationDto> AddAsync(CreateDissertationDto dto)
+    public async Task<DissertationDto?> AddAsync(CreateDissertationDto dto)
     {
+        var applicant = await _repoApplicant.GetByIdAsync(dto.ApplicantId);
+
+        if (applicant is null)
+            return null;
+
         var dissertation = new Dissertation
         {
             Title = dto.Title,
             SpecialtyCode = dto.SpecialtyCode,
             Type = dto.Type,
+            ApplicantId = dto.ApplicantId,
             Status = DissertationStatus.Submitted,
             ApplicationDate = DateOnly.FromDateTime(DateTime.UtcNow)
         };
