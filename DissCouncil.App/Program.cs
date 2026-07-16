@@ -17,6 +17,8 @@ builder.Services.AddScoped<IDissertationRepository, DissertationRepository>();
 builder.Services.AddScoped<IDissertationService, DissertationService>();
 builder.Services.AddScoped<IApplicantRepository, ApplicantRepository>();
 builder.Services.AddScoped<IApplicantService, ApplicantService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //сбор инфы про эндпоинты
 builder.Services.AddEndpointsApiExplorer();
@@ -28,9 +30,9 @@ var app = builder.Build();  // готовое приложение из всех
 
 // middleware-конвейер (она же цепочка обработчиков запроса)
 app.UseHttpsRedirection();
-app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
+app.MapControllers();
 
 // запуск приложения
 app.Run();
