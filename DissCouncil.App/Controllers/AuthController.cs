@@ -26,8 +26,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(RegisterDto dto)
+    public async Task<IActionResult> Login(LoginDto dto)
     {
-        return Ok();
+        var token = await _service.LoginAsync(dto);
+
+        if (token is null)
+            return Unauthorized("Wrong login or password");
+
+        return Ok(token);
     }
 }
