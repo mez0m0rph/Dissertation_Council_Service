@@ -24,4 +24,10 @@ public class AuthController : ControllerBase
 
         return Ok("Registered");
     }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(RegisterDto dto)
+    {
+        return Ok();
+    }
 }
