@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Dissertation> Dissertations { get; set; }
     public DbSet<Applicant> Applicants { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +27,13 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Applicant>()
             .Property(x => x.Degree)
             .HasConversion<string>();
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Username)
+            .IsUnique();
     }
 }
