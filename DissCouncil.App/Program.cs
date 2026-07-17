@@ -2,6 +2,9 @@ using DissCouncil.Persistence;
 using DissCouncil.App.Services;
 using DissCouncil.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 //создание строителя приложения 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +23,25 @@ builder.Services.AddScoped<IApplicantService, ApplicantService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true, 
+            ValidateLifetime = true, 
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            )
+        };
+    });
+
+
+
 //сбор инфы про эндпоинты
 builder.Services.AddEndpointsApiExplorer();
 // генерация описания по этой инфе
@@ -32,6 +54,10 @@ var app = builder.Build();  // готовое приложение из всех
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 // запуск приложения
