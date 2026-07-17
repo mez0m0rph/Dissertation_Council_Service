@@ -1,12 +1,13 @@
 using DissCouncil.App.Services;
-using DissCouncil.Domain.Entities;
 using DissCouncil.App.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DissCouncil.App.Controllers;
 
 [ApiController]
 [Route("dissertations")]
+[Authorize]
 public class DissertationController : ControllerBase
 {
     private readonly IDissertationService _service;
@@ -57,6 +58,7 @@ public class DissertationController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(Guid id)
     {
         var deleted = await _service.DeleteAsync(id);
