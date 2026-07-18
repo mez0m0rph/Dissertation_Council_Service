@@ -52,9 +52,9 @@ public class DissertationService : IDissertationService
 
     }
 
-    public async Task<List<DissertationDto>> GetAllAsync()
+    public async Task<List<DissertationDto>> GetAllAsync(int page, int pageSize)
     {
-        var dissertations = await _repo.GetAllAsync();
+        var dissertations = await _repo.GetAllAsync(page, pageSize);
 
         return dissertations
             .Select(x => MapToDto(x))
@@ -93,5 +93,21 @@ public class DissertationService : IDissertationService
     public async Task<bool> DeleteAsync(Guid id)
     {
         return await _repo.DeleteAsync(id);
+    }
+
+    public async Task<bool> ChangeStatusAsync(Guid id, 
+        DissertationStatus newStatus)
+    {
+        var dissertation = await _repo.GetByIdAsync(id);
+
+        if (dissertation is null)
+            return false;
+
+        if ((int)newStatus != ((int)dissertation.Status + 1))
+            return false;
+        
+        dissertation.Status = newStatus;
+        await _repo.UpdateAsync(dissertation);
+        return true;
     }
 }
