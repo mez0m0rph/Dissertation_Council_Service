@@ -18,11 +18,14 @@ public class DissertationRepository : IDissertationRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<Dissertation>> GetAllAsync()
+    public async Task<List<Dissertation>> GetAllAsync(int page, int pageSize)
     {
         return await _context.Dissertations
             .AsNoTracking()
             .Include(x => x.Applicant)
+            .OrderBy(x => x.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 

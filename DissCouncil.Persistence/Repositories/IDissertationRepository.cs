@@ -5,7 +5,7 @@ namespace DissCouncil.Persistence.Repositories;
 public interface IDissertationRepository
 {
     Task AddAsync(Dissertation dissertation);
-    Task<List<Dissertation>> GetAllAsync();
+    Task<List<Dissertation>> GetAllAsync(int page, int pageSize);
     Task<Dissertation?> GetByIdAsync(Guid id);
     Task UpdateAsync(Dissertation updatedDis);
     Task<bool> DeleteAsync(Guid id);

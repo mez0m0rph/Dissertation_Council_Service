@@ -29,9 +29,9 @@ public class DissertationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(int page = 1, int pageSize = 20)
     {
-        var dissertations = await _service.GetAllAsync();
+        var dissertations = await _service.GetAllAsync(page, pageSize);
         return Ok(dissertations);
     }
 
@@ -66,6 +66,18 @@ public class DissertationController : ControllerBase
         if (!deleted) 
             return NotFound();
 
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/status")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> UpdateStatus(Guid id, ChangeStatusDto dto)
+    {
+        var res = await _service.ChangeStatusAsync(id, dto.NewStatus);
+
+        if (!res)
+            return BadRequest();
+        
         return NoContent();
     }
 }
