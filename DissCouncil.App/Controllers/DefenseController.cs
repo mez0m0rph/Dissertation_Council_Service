@@ -39,9 +39,9 @@ public class DefenseController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(int page = 1, int pageSize = 20)
     {
-        var defenses = await _service.GetAllAsync();
+        var defenses = await _service.GetAllAsync(page, pageSize);
 
         return Ok(defenses);
     }
@@ -65,6 +65,17 @@ public class DefenseController : ControllerBase
         if (!deleted)
             return NotFound();
 
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/conduct")]
+    public async Task<IActionResult> Conduct(Guid id, ConductDefenseDto dto)
+    {
+        var defense = await _service.ConductAsync(id, dto);
+
+        if (!defense)
+            return BadRequest();
+        
         return NoContent();
     }
 }

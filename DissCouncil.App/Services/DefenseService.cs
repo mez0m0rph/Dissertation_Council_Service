@@ -35,11 +35,19 @@ public class DefenseService : IDefenseService
         };
     }
 
+    private bool isDefenseSuccessful(int VotesFor, int VotesAgainst)
+    {
+        return VotesFor * 3 >= ((VotesFor + VotesAgainst) * 2);
+    }
+
     public async Task<DefenseDto?> AddAsync(CreateDefenseDto dto)
     {
         var dissertation = await _repoDisser.GetByIdAsync(dto.DissertationId);
 
         if (dissertation is null) 
+            return null;
+
+        if (dto.StartTime >= dto.FinishTime)
             return null;
 
         var defense = new Defense
@@ -49,10 +57,6 @@ public class DefenseService : IDefenseService
             StartTime = dto.StartTime,
             FinishTime = dto.FinishTime,
             CouncilMembersRequired = dto.CouncilMembersRequired,
-            CouncilMembersPresent = dto.CouncilMembersPresent,
-            VotesFor = dto.VotesFor,
-            VotesAgainst = dto.VotesAgainst,
-            InvalidBallots = dto.InvalidBallots,
             Status = DefenseStatus.Scheduled
         };
 
@@ -71,9 +75,9 @@ public class DefenseService : IDefenseService
         return MapToDto(defense);
     }
 
-    public async Task<List<DefenseDto>> GetAllAsync()
+    public async Task<List<DefenseDto>> GetAllAsync(int page, int pageSize)
     {
-        var defenses = await _repo.GetAllAsync();
+        var defenses = await _repo.GetAllAsync(page, pageSize);
 
         return defenses
             .Select(d => MapToDto(d))
@@ -113,6 +117,31 @@ public class DefenseService : IDefenseService
             return false;
 
         await _repo.DeleteAsync(id);
+        return true;
+    }
+
+    public async Task<bool> ConductAsync(Guid id, ConductDefenseDto dto)
+    {
+        var defense = await _repo.GetByIdAsync(id);
+
+        if (defense is null)
+            return false;
+
+        if (dto.CouncilMembersPresent < defense.CouncilMembersRequired)
+            return false;
+        
+        if ((dto.VotesFor + dto.VotesAgainst + dto.InvalidBallots) > dto.CouncilMembersPresent)
+            return false;
+
+        defense.CouncilMembersPresent = dto.CouncilMembersPresent;
+        defense.VotesFor = dto.VotesFor;
+        defense.VotesAgainst = dto.VotesAgainst;
+        defense.InvalidBallots = dto.InvalidBallots;
+
+        defense.Status = isDefenseSuccessful(dto.VotesFor, dto.VotesAgainst) ? 
+            DefenseStatus.Successful : DefenseStatus.Failed;
+            
+        await _repo.UpdateAsync(defense);
         return true;
     }
 }
