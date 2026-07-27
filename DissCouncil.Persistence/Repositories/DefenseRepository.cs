@@ -28,11 +28,14 @@ public class DefenseRepository : IDefenseRepository
             .FirstOrDefaultAsync(d => d.Id == id);
     }
 
-    public async Task<List<Defense>> GetAllAsync()
+    public async Task<List<Defense>> GetAllAsync(int page, int pageSize)
     {
         return await _context.Defenses
             .AsNoTracking()
             .Include(d => d.Dissertation)
+            .OrderBy(d => d.Id)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
     }
 
