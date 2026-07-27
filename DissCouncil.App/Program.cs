@@ -22,6 +22,8 @@ builder.Services.AddScoped<IApplicantRepository, ApplicantRepository>();
 builder.Services.AddScoped<IApplicantService, ApplicantService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IDefenseRepository, DefenseRepository>();
+builder.Services.AddScoped<IDefenseService, DefenseService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -50,7 +52,6 @@ builder.Services.AddSwaggerGen();
 // граница (собираем все регистрации в готовое приложение)
 var app = builder.Build();  // готовое приложение из всех регистраций
 
-// middleware-конвейер (она же цепочка обработчиков запроса)
 app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
